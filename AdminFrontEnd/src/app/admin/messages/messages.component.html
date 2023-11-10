@@ -1,0 +1,131 @@
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Bayiler</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a routerLink="/">Ana Sayfa</a></li>
+                        <li class="breadcrumb-item active">Bayiler</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <!-- Default box -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Bayiler</h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group offset-6">
+                            <input class="form-control" type="search" [(ngModel)]="filterText"
+                                [ngModelOptions]="{standalone: true}" placeholder="Aranacak kelime"
+                                aria-label="Aranacak kelime">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <table class="table table-hovered" id="excel-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Bayi Adı</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let customer of customers
+              | messagePipe: filterText
+              let index = index">
+                            <td [innerText]="index + 1"></td>
+                            <td [innerText]="customer.name"></td>
+                            <td>
+                                <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#showMessageModel"
+                                    (click)="messageLoop(customer.id)">Mesaj</button>
+                                
+                            </td>
+                            
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="modal fade" id="showMessageModel" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" >
+        <div class="modal-content" style="width: 650px;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{{customer.name}}</h5>
+                
+            </div>
+            <div class="modal-body" style="border-radius: 15px;">
+
+                <div #scrollMe style="height: 450px; overflow-y: auto; background-color: #E8F0FE;">
+                    <div *ngFor="let message of messages let index = index">
+                        <p class="col-8" [ngStyle]="{
+                            'margin-left': message.isAdmin ? 'auto' : '0',
+                            'margin-right': message.isAdmin ? '0' : 'auto',
+                            'background-color': message.isAdmin ? '#D6E6FF' : '#FAD4FE',
+                            'padding': '10px',
+                            'border-radius': '15px',
+                            'margin-bottom': '10px',
+                            'word-wrap': 'break-word',
+                            'overflow-wrap': 'break-word',
+                            'width': '70%',
+                            'text-align': message.isAdmin ? 'right' : 'left'
+                        }">
+                            {{message.content}}<span style="font-size: 10px;">({{message.timeStamp | date:'HH.mm'}})</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div style="display:flex; justify-content: space-between;">
+                    <label for="exampleInputEmail1">Mesaj</label>
+                    <button style="border-radius: 50px; background-color: transparent; border:none; margin-right: 20px;" (click)="scrollToBottom()">
+                        <i class="fa-solid fa-down-long"></i>
+                    </button>
+                </div>
+
+                <form #addForm="ngForm" autocomplete="off">
+                    <div class="form-group">
+
+                        <textarea required name="" class="form-control" ngModel name="content" #content id="" cols="8"
+                            rows="1"></textarea>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" [disabled]="!addForm.valid"
+                    (click)="sendMessage(addForm)">Mesaj Gönder</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeLoop()">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>

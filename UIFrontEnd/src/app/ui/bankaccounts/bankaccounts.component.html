@@ -1,0 +1,193 @@
+<div style="width:75%; margin-left: 12.5%; margin-top: 150px;">
+    <div class="content-wrapper">
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <!-- Main content -->
+                        <div class="invoice p-3 mb-3">
+                            <!-- title row -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <h4>
+                                        <i class="fas fa-globe"></i>
+                                        <!-- <small class="float-right">Tarih: {{ order.date | date:'dd.MM.yyyy' }}</small> -->
+
+                                    </h4>
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                            <!-- info row -->
+                            <div class="row invoice-info">
+                                <div class="col-sm-4 invoice-col">
+                                    <address>
+                                        <!-- <strong [innerText]="order.customerName"></strong><br>
+                        <p class="lead">Sipariş Durumu <strong>{{ order.status }}</strong></p> -->
+                                    </address>
+                                </div>
+                                <div class="col-sm-4 invoice-col">
+
+                                </div>
+                                <div class="col-sm-4 invoice-col">
+
+                                </div>
+                            </div>
+
+                            <button class="btn btn-success btn-custom" (click)="openAccountModal()">Hesap
+                                Ekle</button>
+                            <button class="btn btn-success btn-custom" (click)="openCardModal()">Kart
+                                Ekle</button>
+                                
+                            <div class="row">
+                                <div class="col-12 table-responsive">
+                                    <h4>Banka Hesapları</h4>
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Banka Adı</th>
+                                                <th>IBAN</th>
+                                                <th>Bakiye</th>
+                                                <th>İşlemler</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let bankaccount of bankAccounts let index = index">
+                                                <td [innerText]="index + 1"></td>
+                                                <td [innerText]="bankaccount.bankName"></td>
+                                                <td [innerText]="bankaccount.iban | bankaccountPipe"></td>
+                                                <td
+                                                    [innerText]="bankaccount.balance | currency:'TRY':'symbol-narrow':'1.2-2'">
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-danger mx-2" [swal]="deleteSwal"
+                                                        (confirm)="deleteAccount(bankaccount)">Sil</button>
+                                                </td>
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <hr>
+                                    <h4>Kayıtlı Kartlar</h4>
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Kart Sahibi</th>
+                                                <th>Kart Numarası</th>
+                                                <th>İşlemler</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let card of cards let index = index">
+                                                <td [innerText]="index + 1"></td>
+                                                <td [innerText]="card.cardHolder"></td>
+                                                <td [innerText]="card.cardNumber | cardPipe"></td>
+                                                <td>
+                                                    <button class="btn btn-danger mx-2" [swal]="deleteSwal"
+                                                        (confirm)="deleteCard(card)">Sil</button>
+                                                </td>
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                            <!-- /.row -->
+
+
+                            <!-- /.row -->
+
+                            <!-- this row will not appear when printing -->
+                            <div class="row no-print">
+                                <div class="col-12">
+                                    <a href="javascript:window.print()" rel="noopener" class="btn btn-default"><i
+                                            class="fas fa-print"></i> Yazdır</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.invoice -->
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </section>
+    </div>
+
+
+    <div *ngIf='isOpen' class="modal2" id="addModel" tabindex="-1" aria-hidden="true">
+        <div>
+            <h5 id="exampleModalLabel">Banka Hesabı Ekle</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div>
+            <form #addForm="ngForm">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Banka adı</label>
+                    <input type="text" class="form-control" ngModel name="bankName" #bankName required minlength="3"
+                        placeholder="Banka Adı">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">IBAN</label>
+                    <input type="text" class="form-control" ngModel name="iban" #iban required minlength="26"
+                        pattern="\d*" maxlength="26" placeholder="IBAN(TR yazmadan)">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Bakiye</label>
+                    <input type="text" class="form-control" ngModel name="balance" #balance required minlength="1"
+                        pattern="\d*" maxlength="20" placeholder="Bakiye(TL)">
+                </div>
+
+            </form>
+        </div>
+        <button type="button" class="btn btn-primary" [disabled]="!addForm.valid" (click)="addAccount(addForm)">Hesap Ekle</button>
+        <button type="button" class="btn btn-secondary" (click)="closeAccountModal()">Kapat</button>
+    </div>
+
+
+
+    <div *ngIf='isOpenTwo' class="modal3" id="addModel" tabindex="-1" aria-hidden="true">
+        <div>
+            <h5 id="exampleModalLabel">Kart Ekle</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div>
+            <form #addForm2="ngForm">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Kart Sahibi</label>
+                    <input type="text" class="form-control" ngModel name="cardHolder" #cardHolder required minlength="3"
+                        placeholder="Kart Sahibi">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Kart Numarası</label>
+                    <input type="text" class="form-control" ngModel name="cardNumber" #cardNumber required minlength="16"
+                        pattern="\d*" maxlength="16" placeholder="16 Haneli Kart Numarası">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">CVV</label>
+                    <input type="text" class="form-control" ngModel name="cvv" #iban required minlength="3"
+                        pattern="\d*" maxlength="3" placeholder="CVV Kodu">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Limit</label>
+                    <input type="text" class="form-control" ngModel name="limit" #limit required minlength="1"
+                        placeholder="Limit">
+                </div>
+            </form>
+        </div>
+        <button type="button" class="btn btn-primary" [disabled]="!addForm2.valid" (click)="addCard(addForm2)">Kart Ekle</button>
+        <button type="button" class="btn btn-secondary" (click)="closeCardModal()">Kapat</button>
+    </div>
+
+
+
+
+</div>
+
+
+
+
+
+<swal #deleteSwal title="Sil?" text="Banka hesabını silmek istiyor musunuz?" type="question" [showCancelButton]="true"
+    [focusCancel]="true" [swalOptions]="{ confirmButtonText: 'Sil', cancelButtonText: 'Vazgeç' }"></swal>

@@ -1,0 +1,169 @@
+<section id="feature" class="feature">
+  <div class="container">
+    <div class="section-header">
+      <h2>Siparişler</h2>
+    </div>
+    <div class="feature-content">
+      <div class="form-group">
+        <input type="text" class="form-control" [(ngModel)]="filterText" [ngModelOptions]="{standalone:true}">
+      </div>
+      <div class="form-group">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Sipariş Durumu</th>
+              <th>Tarih</th>
+              <th>Sipariş Numarası</th>
+              <th>Adet</th>
+              <th>Toplam</th>
+              <th>Ödeme Durumu</th>
+              <th>İşlemler</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of orders | orderPipe:filterText let index = index ">
+              <td [innerText]="index + 1"></td>
+              <td [innerText]="order.status"></td>
+              <td [innerText]="order.date | date: 'dd.MM.yyyy'"></td>
+              <td>
+                <a routerLink="/order-detail/{{order.id}}">{{order.orderNumber}}</a></td>
+              <td [innerText]="order.quantity"></td>
+              <td [innerText]="order.total | currency:'TRY':'symbol-narrow':'1.2-2'"></td>
+              <td *ngIf="order.isPaid" style="color:green;font-weight: bold;">Ödeme yapıldı</td>
+              <td *ngIf="order.status == 'Reddedilen'" style="color:red;font-weight: bold;">Ödeme İptal</td>
+              
+              <td *ngIf="order.status == 'Onay Bekliyor'"style="color:orange;font-weight: bold;">Onay Bekliyor</td>
+              <td *ngIf="order.status == 'İşlemde' && order.isPaid == false"><button class="btn btn-success" (click)="openOrCloseModal(order.id,order.total)">Ödeme Yap</button></td>
+              <td *ngIf="order.status == 'Sevke Hazır'" style="color:blue;font-weight: bold;">Sevke Hazır</td>
+              
+              
+              <td *ngIf="order.status == 'Onay Bekliyor'">
+                <button class="btn btn-danger"  [swal]="deleteSwal" (confirm)="delete(order)">Siparişi Sil</button>
+              </td>
+              
+              <td *ngIf="order.status == 'İşlemde'" style="color:orange;font-weight: bold;">İşlemde</td>
+              
+              <td *ngIf="order.status == 'Reddedilen'" style="color:red;font-weight: bold;">Sipariş İptal Edildi</td>
+              <td *ngIf="order.status == 'Sevkiyatı Yapıldı'" style="color:green;font-weight: bold;">Sipariş Tamamlandı</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+
+<div *ngIf='isOpen' class="modal2" id="addModel" tabindex="-1" aria-hidden="true">
+
+  <div>
+      <div class="container mt-3">
+  <!-- Ödeme Bilgileri Başlığı -->
+  <h2>Ödeme Bilgileri</h2>
+  <!-- Tab Başlıkları -->
+  <div style="max-width: 50%;">
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#bankTransfer"(click)="getCustomerAccounts()">Banka Havale/EFT</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#creditCard">Kredi Kartı</a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Tab İçerikleri -->
+  <div class="tab-content">
+    <!-- Banka Havalesi Tab İçeriği -->
+    <div id="bankTransfer" class="container tab-pane fade"><br>
+      <h4>Banka Havale İle Ödeme</h4>
+      <form #addForm3="ngForm">
+        <div class="form-group">
+          <div class="mb-3">
+            <label for="exampleSelect" class="form-label">Gönderici Hesap Seçimi</label>
+            <select class="form-control form-select" id="exampleSelect" [(ngModel)]="accountId" [ngModelOptions]="{standalone:true}" (click)="getIban(accountId)">
+              <option value="-1" selected disabled>Banka Hesabınızı Seçiniz</option>
+              <option *ngFor="let bankAccount of bankAccounts" [value]="bankAccount.id">
+                {{ bankAccount.bankName }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="iban">Gönderici IBAN *</label>
+          <input readonly type="text" class="form-control" id="iban" required>
+        </div>
+        <div class="form-group">
+          <div class="mb-3">
+            <label for="exampleSelect" class="form-label">Alıcı Hesap Seçimi</label>
+            <select class="form-control form-select" id="exampleSelect" [(ngModel)]="adminAccountId" [ngModelOptions]="{standalone:true}" (click)="getAdminIban(adminAccountId)">
+              <option value="-1" selected disabled>Banka Hesabınızı Seçiniz</option>
+              <option *ngFor="let adminAccount of adminAccounts" [value]="adminAccount.id" >
+                {{ adminAccount.bankName }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="iban">Alıcı IBAN *</label>
+          <input readonly type="text" class="form-control" id="receiveriban" required>
+        </div>
+        <div class="form-group">
+          <label for="transferAmount">Havale/EFT Tutarı *</label>
+          <input readonly [(ngModel)]="moneyTransfer" [ngModelOptions]="{standalone:true}" type="number" class="form-control" id="transferAmount" required>
+        </div>
+        <button type="submit" class="btn btn-primary pay-btn" (click)="payWithAccount()">Öde</button>
+      </form>
+    </div>
+    <!-- Kredi Kartı Tab İçeriği -->
+    <div id="creditCard" class="container tab-pane active"><br>
+      <h4>Kredi Kartı İle Ödeme</h4>
+      <form #addForm="ngForm">
+        <!-- Kullanıcı kredi kartını bir açılır kutudan seçecek -->
+        <div class="form-group">
+          <label for="customerCard">Kart Seçiniz *</label>
+          <select class="form-control" id="customerCard" [(ngModel)]="customerCardId" [ngModelOptions]="{standalone:true}" (click)="getCustomerCard(customerCardId)" required>
+            <option *ngFor="let card of customerCards" [value]="card.id">{{ card.cardNumber }} / {{card.cardHolder}}</option>
+          </select>
+        </div>
+        <!-- Seçilen kartın bilgileri otomatik olarak doldurulacak -->
+        <div class="form-group">
+          <label for="cardName">Kart Sahibi</label>
+          <input type="text" class="form-control" id="cardHolder" readonly>
+        </div>
+        <div class="form-group">
+          <label for="expiryDate">Kart Numarası</label>
+          <input type="text" class="form-control" id="cardNumber" readonly>
+        </div>
+        <div class="form-group">
+          <label for="cvv">Güvenlik Kodu (CVV)</label>
+          <input type="text" class="form-control" id="cvv"  readonly>
+        </div>
+        <div class="form-group">
+          <label for="cvv">Ödeme Tutarı</label>
+          <input type="text" class="form-control" [(ngModel)]="moneyTransfer" [ngModelOptions]="{standalone:true}" readonly>
+        </div>
+
+        <button class="btn btn-primary pay-btn" (click)="payWithCard()">Öde</button>
+      </form>
+    </div>
+    
+  </div>
+</div>
+  </div>
+  <!-- <button type="button" class="btn btn-primary" [disabled]="!addForm.valid" (click)="pay(addForm)">Ödeme Yap</button> -->
+  <button type="button" style="margin-top:20px; width: 68%; margin-left:3%" class="btn btn-danger" (click)="openOrCloseModal(0,0)">Kapat</button>
+</div>
+
+<swal
+  #deleteSwal
+  title="Sil?"
+  text="Siparişi silmek istiyor musunuz?"
+  type="question"
+  [showCancelButton]="true"
+  [focusCancel]="true"
+  [swalOptions]="{ confirmButtonText: 'Sil', cancelButtonText: 'Vazgeç' }"
+  ></swal>

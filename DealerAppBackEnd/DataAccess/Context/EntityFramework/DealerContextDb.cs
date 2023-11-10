@@ -1,0 +1,33 @@
+using Entities.Concrete;
+using Microsoft.EntityFrameworkCore;
+
+namespace DataAccess.Context.EntityFramework
+{
+    public class DealerContextDb : DbContext
+    {
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer("Server=DESKTOP-GMK1DNE\\SQLEXPRESS;Database=DealerAppDb;Integrated Security=true;"); 
+        }
+
+        public DbSet<User> Users { get; set; }
+        public DbSet<OperationClaim> OperationClaims { get; set; }
+        public DbSet<UserOperationClaim> UserOperationClaims { get; set; }
+        public DbSet<EmailParameter> EmailParameters { get; set; }
+        public DbSet<Basket> Baskets { get; set; }
+        public DbSet<CustomerRelationShip> CustomerRelationShips { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<PriceListDetail> PriceListDetails { get; set; }
+        public DbSet<PriceList> PriceLists { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<CustomerAccount> CustomerAccounts { get; set; }
+        public DbSet<CustomerCard> CustomerCards { get; set; }
+        public DbSet<CustomerCardTransaction> CustomerCardTransactions { get; set; }
+        public DbSet<AccountTransaction> AccountTransactions { get; set; }
+        public DbSet<UserAccount> UserAccounts { get; set; }
+    }
+}

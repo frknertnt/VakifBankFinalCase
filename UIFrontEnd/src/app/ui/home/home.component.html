@@ -1,0 +1,35 @@
+<section id="new-arrivals" class="new-arrivals">
+  <div class="container">
+    <div class="section-header">
+      <h3>Hoş Geldiniz <span *ngIf="isAuth">{{customers.name}}</span></h3>
+      <hr>
+      <h2>Ürünler</h2>
+    </div><!--/.section-header-->
+    <div class="new-arrivals-content">
+      <input type="text" class="form-control" placeholder="Ara" [(ngModel)]="filterText"
+        [ngModelOptions]="{standalone: true}">
+    </div>
+    <div class="new-arrivals-content">
+      <div class="row">
+        <div *ngFor="let product of products | productPipe:filterText">
+          <div class="col-md-3 col-sm-4" *ngIf="product.price != 0">
+            <div class="single-new-arrival">
+              <div class="single-new-arrival-bg">
+                <img src="http://localhost:4200/assets/img/{{product.mainImageUrl}}" alt="new-arrivals images">
+                <div class="single-new-arrival-bg-overlay"></div>
+              </div>
+              <h4><a routerLink="detail/{{product.id}}" [innerText]="product.name"></a></h4>
+              <p style="color:red;" *ngIf="product.stock <= 10">Son {{product.stock}} ürün</p>
+              <p *ngIf="isAuth" class="arrival-product-price text-danger"><del
+                  [innerText]="product.price | currency: 'TRY':'symbol-narrow':'1.2-2'"></del></p>
+              <p class="arrival-product-price" *ngIf="isAuth"
+                [innerText]="(product.discount > 0 ? (product.price*(100-product.discount))/100 : product.price) | currency: 'TRY':'symbol-narrow':'1.2-2'">
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!--/.container-->
+
+</section>
