@@ -17,7 +17,7 @@ Bu sistem, bayilerin siparişlerini yönetmelerine, ürün stok durumlarını ve
 
 1. Projeyi klonlayın:
     ```
-    git clone [repo-link]
+    git clone https://github.com/frknertnt/VakifBankFinalCase.git
     ```
 2. Database backup ve script dosyalarını veritabanınıza yükleyin.
 3. API için gerekli NuGet paketlerini yükleyin:
