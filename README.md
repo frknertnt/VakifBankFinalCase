@@ -2,7 +2,7 @@
 
 Tanıtım Linki: https://www.youtube.com/watch?v=U6LO1-F6rqE
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/frknertnt/VakifBankFinalCase/blob/main/ImageForApp/b2bphoto.png)
 
 Bu sistem, bayilerin siparişlerini yönetmelerine, ürün stok durumlarını ve onlara özel fiyatları görüntülemelerine ve ödemelerini gerçekleştirmelerine olanak tanıyan tam entegre bir çözümdür. B2B (Bussiness-to-Bussiness) olarak bilinen bu sistem şirketten şirkete e-ticaret sistemi sunar. Şirket (admin) sisteme ürünlerini ekledikten sonra bayilere özel fiyatlar oluşturmak için ilk olarak fiyat listesi oluşturur ardından bu fiyat listesi üzerinden bayiyle ilişki kurar ve bayi ona özel fiyatlar ile ürün alışverişi yapar.
 ## Başlangıç
@@ -28,7 +28,7 @@ Bu sistem, bayilerin siparişlerini yönetmelerine, ürün stok durumlarını ve
 
 Proje altyapısı Visual Studio'da extension olarak indirilip kurgulandı. Mevcut 5 katmandan oluşan monolitik mimaride Bussiness, Core, DataAccess, Entity ve WebApi katmanları kullanılıyor. Entity katmanına eklenen sınıflar ile altyapının sağlamış olduğu CodeGenerator yardımıyla ilgili katmanlarda servisler ve diğer kod yapıları sistem tarafından oluşturuluyor.
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/frknertnt/VakifBankFinalCase/blob/main/ImageForApp/b2bdiyagram.png)
 
 - **Bussiness**: Bu katman uygulamanın veri yönetimi, güvenlik politikaları ve yardımcı işlevler gibi çeşitli işlevsel ihtiyaçlarını karşılayacak şekilde düzenlendi. Listeleme işlemlerinde Cache kullanıldı.
 
@@ -75,13 +75,19 @@ Bayi bağlantısı oluştuktan sonra UI arayüzüne geçin ve oluşturduğunuz m
   - Mesajlaşma modülü üzerinden iletişim kurabilir.
   - Banka hesaplarını yönetebilir.
   
-  ![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+  ![App Screenshot](https://github.com/frknertnt/VakifBankFinalCase/blob/main/ImageForApp/order.png)
 
 ### Anlık Mesajlaşma
 
 Şirket ve bayi arasında anlık iletişimi sağlayan mesajlaşma sistemi bulunmaktadır
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/frknertnt/VakifBankFinalCase/blob/main/ImageForApp/chat.gif)
+
+### Ürün Ana Resim Seçimi
+
+Ürün fotoğrafları üzerinden ana resim seçimi yapılabilir
+
+![App Screenshot](https://github.com/frknertnt/VakifBankFinalCase/blob/main/ImageForApp/anaresim.gif)
 
 ### API Endpoints
 
