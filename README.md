@@ -66,8 +66,6 @@ Bayi bağlantısı oluştuktan sonra UI arayüzüne geçin ve oluşturduğunuz m
   - Ödeme işlemlerini yönetebilir.
   - Sepete eklediği ürünü stok durumuna göre artırıp azaltabilir.
 
-  ![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
-
 - **Admin**:
   - Tüm kullanıcı işlemlerini yönetir. (Bayi şifre güncelleme dahil)
   - Sipariş onayı ve reddi verebilir.
